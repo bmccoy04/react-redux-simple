@@ -20,13 +20,19 @@ export default function reducer(state={
                 ...state,
                 fetching: false,
                 fetched: true,
-                tweets: action.payload
+                user: action.payload
             }
         }
-        case "SER_USER_NAME":{
+        case "SET_USER_NAME":{
             return {
                 ...state,
                 user: {...state.user, name: action.payload},
+            }
+        }
+        case "SET_USER_AGE":{
+            return {
+                ...state,
+                user: {...state.user, age: action.payload},
             }
         }
     }

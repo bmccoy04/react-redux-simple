@@ -1,26 +1,32 @@
-import React from "react";
+import React from "react"
+import { connect } from "react-redux"
+import {fetchUser} from "../actions/userActions"
+import {fetchTweets} from "../actions/tweetsActions"
 
-import Footer from "./Footer";
-import Header from "./Header";
-
+@connect(store => {
+    return {
+        user: store.user.user,
+        userFetched: store.user.fetched,
+        tweets: store.tweets.tweets,
+    }
+})
 export default class Layout extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      title: "Welcome",
-    };
-  }
-
-  changeTitle(title) {
-    this.setState({title});
-  }
-
-  render() {
-    return (
-      <div>
-        <Header changeTitle={this.changeTitle.bind(this)} title={this.state.title} />
-        <Footer />
-      </div>
-    );
-  }
+    componentWillMount(){
+        this.props.dispatch(fetchUser());
+    }
+    fetchTweets(){
+        console.log("fetch tweets!!!");
+        this.props.dispatch(fetchTweets());
+    }
+    render() {
+        const {user, tweets} = this.props;
+        if(!tweets.length)
+            return <button onClick={this.fetchTweets.bind(this)}>click</button>
+        
+        const mappedTweets = tweets.map(tweet => <li>{tweet.text}</li>);
+        return  <div>
+            <h1>{this.props.user.name}</h1>
+            <ul>{mappedTweets}</ul>
+        </div>;
+    }
 }
